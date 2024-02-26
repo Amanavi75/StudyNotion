@@ -166,3 +166,28 @@ exports.signUp = async(req,res)=>{
     }
 
 }
+
+exports.signin = async(req,res)=>{
+    const {email,password} = req.body;
+
+    if(!email || !password){
+        return res.status(500).json({
+            success:true,
+            message:"unable to fetch email or password"
+        })
+    }
+
+    const user = await User.findOne({email}).populate("additionalDetails");
+
+    if(!user){
+        return res.status(400).json({
+            success:false,
+            message:"unable to fetch user from the database"
+        })
+    }
+
+    //generating the jwt 
+    
+
+
+}
