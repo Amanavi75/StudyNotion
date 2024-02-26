@@ -1,7 +1,7 @@
 const User = require("../models/User")
 const OTP = require("../models/OTP");
 const otpGenerator = require("otp-generator");
-
+const bcrypt = require("bcrypt")
 //send otp 
 exports.sendOTP = async(req,res)=>{
     try{
@@ -66,17 +66,103 @@ exports.sendOTP = async(req,res)=>{
 
 //sign up 
 exports.signUp = async(req,res)=>{
-    //data fetch 
-    const {firstName,lastName,email} = req.body();
+    try{
+        //data fetch 
+    const {firstName,
+        lastName,
+        email,
+        password,
+        confirmPassword,
+        accountType,
+        contactNumber,
+        otp,
 
-    if(!(firstName,lastName,email)){
+ } = req.body();
+
+ //validation 
+ if(!firstName || !lastName || !email || !password || !confirmPassword || !accountType || !contactNumber || !otp){
+     return res.status(400).json({
+         success:false,
+         message:"all fields are required "
+     })
+ }
+
+ //check for the password
+ if(password!=confirmPassword){
+     res.status(500).json({
+         success:false,
+         message:"invalid password"
+     })
+ }
+
+ //check for the existing 
+ const existingUser = await User.findOne({email});
+ if(existingUser){
+     res.status(600).json({
+         success:false,
+         message:"user already exist"
+     })
+ }
+
+ // find most recently otp
+ const recentOtp = OTP.findOne({email}).sort({createdAt:-1}.limit(1))
+ console.log(recentOtp)
+
+ //*validating the  otp 
+ if(recentOtp.length==0){
+     //todo
+     return res.status(400).json({
+         success:false,
+         message:"unable to find otp"
+     })
+
+ }else if(otp!=recentOtp){
+     //todo
+     return res.status(401).json({
+         success:false,
+         message:"invalid otp"
+     })
+
+ }
+
+
+ //hashPassword
+ const hashedPassword = await bcrypt.hash(password,10)
+
+ //create profiledetils and entry in db 
+ const profiledetails = await Profile.create({
+     //todo
+     gender:null,
+     dateOfBirth:null,
+     about:null,
+     contactNumber:null,
+ })
+
+ //*users entry in db 
+ const user = await User.create({
+     firstName,
+     lastName,
+     email,
+     password:hashedPassword,
+     accountType,
+     additionalDetails:profiledetails._id , // since it is passed as reference,
+     course,
+     image:`https://api.dicebear.com/5.x/initials/svg?seed=${firstName} ${lastName}`
+ })
+
+ return res.status(200).json({
+     success:true,
+     message:"user is registered successfully",
+     user,
+ })
+
+    }
+    catch(error){
+        console.log(error)
         return res.status(400).json({
             success:false,
-            message:"unable to get user data "
+            message:"unable to register user please try again",
         })
     }
-
-    
-
 
 }
