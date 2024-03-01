@@ -194,7 +194,7 @@ exports.signin = async(req,res)=>{
         const payload = {
             email:user.email,
             id:user._id,
-            role:user.role,
+            accountType:user.accountType,
         }
         const token = jwt.sign(payload,process.env.JWT_SECRET, {
             expiresIn:"2h",
@@ -231,4 +231,15 @@ exports.signin = async(req,res)=>{
         })
     }
 
+}
+
+
+exports.changePassword = async (req,res)=>{
+    //todo
+    //get data from the body 
+    // get oldPassword , new password, confirmPassword
+    //validation 
+    //update pwd in db
+    //send mail - password updated
+    // return response
 }
