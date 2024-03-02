@@ -237,8 +237,10 @@ exports.signin = async(req,res)=>{
 exports.changePassword = async (req,res)=>{
     //todo
     //get data from the body 
+    const {email,password} = req.body;
+
     // get oldPassword , new password, confirmPassword
-    //validation 
+//validation 
     //update pwd in db
     //send mail - password updated
     // return response
