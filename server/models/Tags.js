@@ -21,3 +21,4 @@ const tagsSchema = new mongoose.Schema({
 })
 
 module.exports= mongoose.model("Tags",tagsSchema);
+// added some comments 
