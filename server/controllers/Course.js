@@ -9,8 +9,6 @@ exports.createCourse = async(res,res)=>{
     try{
         //
         const{title,description,email,} = req.body;
-        
-
     }catch(error){
 
     }
