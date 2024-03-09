@@ -8,6 +8,8 @@ const {uploadImageToCloudinary} = require("../utils/imageUploader")
 exports.createCourse = async(res,res)=>{
     try{
         //
+        const{title,description,email,} = req.body;
+        
 
     }catch(error){
 
