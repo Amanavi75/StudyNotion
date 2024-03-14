@@ -46,3 +46,61 @@ exports.createSection = async(req,res)=>{
         })
     }
 }
+
+exports.updateSection = async(req,res)=>{
+    try{
+        const {sectionName, sectionId} = req.body;
+
+        if(!sectionName || !sectionId){
+            return res.status(400).json({
+                success:false,
+                message:"all fields are required"
+            })
+        }
+
+        const updatedSection = await Section.findByIdAndUpdate({sectionId},{
+            $push:{
+                sectionName:sectionName,
+
+            }
+
+        },
+        {new:true}    
+        );
+
+        return res.status(200).json({
+            success:true,
+            message:"Section updated successfuly ",
+            data:updatedSection,
+        })
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"unable to update section , please try again"
+        })
+    }
+}
+
+
+exports.deleteSection = async(req,res)=>{
+    try {
+
+        const{sectionId} = req.params;
+
+        await Section.findByIdAndDelete(sectionId);
+
+
+        return res.status(200).json({
+            success:true,
+            message:"Section deleted successfuly ",
+
+        })
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"unable to delete section , please try again"
+        })
+    }
+}
