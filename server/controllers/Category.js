@@ -1,4 +1,4 @@
-const Tag = require("../models/category");
+const Tag = require("../models/Categories");
 
 //create tag 
 exports.createCategory = async(req,res)=>{

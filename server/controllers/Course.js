@@ -1,5 +1,5 @@
 const Course = require("../models/Course");
-const Tag = require("../models/category");
+const Categories = require("../models/Categories");
 const User = require("../models/User");
 const {uploadImageToCloudinary} = require("../utils/imageUploader")
 
@@ -8,7 +8,7 @@ const {uploadImageToCloudinary} = require("../utils/imageUploader")
 exports.createCourse = async(res,res)=>{
     try{
         // fetch the data 
-        const{courseName, courseDescription,whatYouWillLearn,price, tag} = req.body;
+        const{courseName, courseDescription,whatYouWillLearn,price, Categories} = req.body;
 
         // get thumNails
         const thumbnail =  req.files.thumbnailImage;
@@ -16,7 +16,7 @@ exports.createCourse = async(res,res)=>{
         //validation 
         if(!courseName || !courseDescription || !whatYouWillLearn ||
         !price ||
-        ! tag ||
+        ! Categories ||
         !thumbnail){
             return res.status(400).json({
                 success:false,
@@ -36,13 +36,13 @@ exports.createCourse = async(res,res)=>{
             });
         }
 
-        //  check for the tag is valid or not
-        const tagDetails = await Tag.findById(tag);
+        //  check for the Categories is valid or not
+        const CategoriesDetails = await Categories.findById(Categories);
 
-        if(!tagDetails){
+        if(!CategoriesDetails){
             return res.status(400).json({
                 success:false,
-                message:"unable to find the tag details"
+                message:"unable to find the Categories details"
             });
         }
 
@@ -58,7 +58,7 @@ exports.createCourse = async(res,res)=>{
             instructor:instructorDetails._id,
             whatYouWillLearn:whatYouWillLearn,
             price,
-            tag:tagDetails._id,
+            Categories:CategoriesDetails._id,
             thumbnail:thumbnailImage.secure_url
         })
 
@@ -77,10 +77,10 @@ exports.createCourse = async(res,res)=>{
             }
             )
 
-            //add the tag schema to
+            //add the Categories schema to
 
-             await Tag.findByIdUpdate({
-                _id:tagDetails._id,
+             await Categories.findByIdUpdate({
+                _id:CategoriesDetails._id,
              },
              {
                 $push:{
