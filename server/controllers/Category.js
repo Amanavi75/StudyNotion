@@ -21,18 +21,18 @@ exports.createCategory = async(req,res)=>{
             description:description,
         })
 
-        console.log(tagDetails)
+        console.log(categoryDetails)
 
         res.status(200).json({
             success:true ,
-            message:"tag created succesFully  "
+            message:"category created succesFully  "
         })
 
 
     }catch(error){
         res.status(500).json({
             success:false ,
-            message:"Unable to create tag "
+            message:"Unable to create category "
         })
     }
 }
@@ -40,18 +40,18 @@ exports.createCategory = async(req,res)=>{
 //getAll tags 
 exports.showAllCategory = async(req,res)=>{
     try{
-        const allTags = await Tag.find({},{name:true, description:true})
+        const allCategory = await Tag.find({},{name:true, description:true})
         res.status(200).json({
             success:true ,
-            message:"all tags generated successfully  ",
-            allTags,
+            message:"all category generated successfully  ",
+            allCategory,
         })
 
 
     }catch(error){
         res.status(500).json({
             success:false ,
-            message:"Unable to get list of all the  tag "
+            message:"Unable to get list of all the  category "
         })
 
     }
