@@ -1,7 +1,5 @@
 const SubSection = require("../models/SubSection")
-
 const User = require("../models/User")
-
 const Course = require("../models/Course");
 const Section = require("../models/Section");
 
@@ -59,4 +57,9 @@ exports.createSubSection = async(req,res)=>{
         })
     }
     
+}
+
+//todo upadte and delete controller 
+exports.updateSubSection = async(req,res)=>{
+
 }
