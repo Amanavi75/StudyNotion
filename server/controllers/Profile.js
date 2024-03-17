@@ -83,3 +83,26 @@ exports.deleteProfile = async(req,res)=>{
         })
     }
 }
+
+exports.getAllUserDetails = async(req,res)=>{
+    try {
+
+        const id = req.user.id;
+
+        const userDetails = await User.findById(id).populate("additionalDetails").exec();
+
+        return res.status(200).json({
+            success:true,
+            message:"User data fetched successfully",
+            userDetails
+        })
+
+    }catch(error){
+        return res.status(500).json({
+            success:false,
+            message:"Unable to get the user Data",
+            error:error.message,
+        })
+
+    }
+}
