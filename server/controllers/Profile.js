@@ -45,5 +45,41 @@ exports.updateProfile = async(req,res)=>{
             error:error.message,
         })
     }
+}
+
+exports.deleteProfile = async(req,res)=>{
+
+    try {
+
+        //get id
+    const id = req.user.id ;
+
     
+    const userDetails = await User.findById(id);
+    //validation 
+    if(!userDetails){
+        return res.status(500).json({
+            success:false,
+            message:"all fields are  required"
+         })
+    }
+    //find profile 
+    const profileId = userDetails.additionalDetails;
+    //delete profile 
+    await Profile.findByIdAndDelete(profileId);
+    // delete user
+    await User.findByIdAndDelete(id);
+
+    return res.status(200).json({
+        success:true,
+        message:"profile deleted successfully",
+    })
+
+    }catch(error){
+        return res.status(400).json({
+            success:false,
+            message:"Unable to delete profile , please try again",
+            error:error.message,
+        })
+    }
 }
