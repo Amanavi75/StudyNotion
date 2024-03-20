@@ -62,4 +62,63 @@ exports.createSubSection = async(req,res)=>{
 //todo upadte and delete controller 
 exports.updateSubSection = async(req,res)=>{
 
+    try {
+        const{subSectionName , SubSectionId} = req.body ;
+
+    if(!sectionName || !SubSectionId){
+        return res.status(400).json({
+            success:false,
+            message:"all fields are required"
+        })
+    } 
+
+    const updatedSubSection = await SubSection.findByIdAndUpdate(
+        {
+            SubSectionId,
+        },
+        {
+            $push:{
+                subSectionName:subSectionName,
+            }
+        },
+        {new:true}
+    ) ;
+
+    return res.status(200).json({
+        success:true,
+        message:"subsection updated successfully",
+        updatedSubSection
+    })
+
+
+    } catch (error) {
+        
+        return res.status(500).json({
+            success:false,
+            message:"unable to update subsection , please try again"
+        })
+    }
+}
+
+exports.deleteSubSection = async(req,res)=>{
+
+   try {
+
+    const{subSectionId} = req.params;
+
+    await SubSection.findByIdAndDelete({subSectionId})
+
+    return res.status(200).json({
+        success:true,
+        message:"subSection deleted successfully"
+    })
+    
+   } catch (error) {
+
+    return res.status(500).json({
+        success:false,
+        message:"unable to delete subsection, please try again"
+    })
+    
+   }
 }
