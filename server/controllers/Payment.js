@@ -95,7 +95,6 @@ exports.capturePayment = async(req,res)=>{
             message:error.message,
         })
     }
-    //return response
     
 }
 
@@ -107,6 +106,85 @@ exports.verifySignature = async(req,res)=>{
 
     const signature = req.headers("x-razorpay-signature");
 
-    
+    const shasum  = crypto.createHmac("sha256",webHookSecret)
+    //used to check integirity 
+    //hmac = hashed based message authentication code , sha-  secure hashing algorithm 
+    shasum.update(JSON.stringify(req.body)) 
+    // converted to string 
+    //* whenever we run some hashing on any string the output that we get in manier cases they are known as digest (mostly in hexdecimal)
+    const digest = shasum.digest("hex");
+
+    if(signature === digest){
+        console.log("payment is authorized")
+
+        const {courseId, userId} = req.body.payload.payment.entity.notes;
+
+        try {
+            //full fil the action 
+
+
+            //find the course and enroll the student in it 
+
+            const enrolledCourse = await Course.findOneAndUpdate(
+                {
+                  _id:courseId,  
+                },
+                {
+                    $push: {studentsEnrolled :userId},
+
+                },
+                {new:true},
+            )
+
+            if(!enrolledCourse){
+                return res.status(500).json({
+                    success:false,
+                    message:'Course not found',
+                })
+            }
+
+            console.log(enrolledCourse);
+
+            //find the student and add the course in their list of enrolled Course
+
+            const enrolledStudent = await User.findOneAndUpdate(
+                {_id:userId},
+                {$push:{courses:courseId}},
+                {new:true}
+
+            )
+
+            console.log(enrolledStudent);
+
+            //send confirmation mail 
+            const emailResponse = await mailSender(
+                enrolledStudent.email,
+                "congratulation from aman",
+                "congratulation , you are on boarded into new Course"
+            );
+
+            console.log(emailResponse);
+
+            return res.status(200).json({
+                success:true,
+                message:"signature verified and course added "
+            })
+
+
+        } catch (error) {
+            return res.status(500).json({
+                success:false,
+                message:error.message
+            })
+        }
+    }else {
+
+        return res.status(500).json({
+            success:false,
+            message:"inavlid request",
+        })
+    }
+
+
 
 }
