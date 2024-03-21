@@ -122,3 +122,5 @@ exports.deleteSubSection = async(req,res)=>{
     
    }
 }
+
+//TODO VERIFY IT WITH THE VIDEO 
