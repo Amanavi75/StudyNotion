@@ -109,7 +109,7 @@ exports.createCourse = async(res,res)=>{
 
 
 // get all courses 
-exports.showAllCourses = async (req,res) =>{
+exports.getAllCourses = async (req,res) =>{
     try{
         const allCourses = await Course.find({},{
             courseName:true,
@@ -132,5 +132,55 @@ exports.showAllCourses = async (req,res) =>{
             message:"cannot fetch courseDetails",
             error:error.message,
         })
+    }
+}
+
+//getCourse Details 
+exports.getCourseDetails = async(req,res)=>{
+    try{
+
+        //get id 
+        const{courseId} = re.body
+
+        //find coursedetails
+        const courseDetails = await Course.findById({courseId})
+        .populate({
+            path:"instructor",
+            populate: {
+                path:"additionalDetails"
+            }
+        })
+        .populate("category")
+        .populate("ratingAndReview")
+        .populate({
+            path:"courseContent",
+            populate:{
+                path:"subSection"
+            }
+        })
+        .exec();
+
+        //validation 
+        if(!courseDetails){
+            return res.status(400).json({
+                success:false,
+                message:`couldn't find course with the courseId ${courseId}`,
+            })
+        }
+
+
+        return res.status(200).json({
+            success:true,
+            message:` course details fetced successfully`,
+            data:courseDetails,
+        })
+    }catch(error){
+
+        return res.status(500).json({
+            success:false,
+            message:"not able to find get the course daetails",
+            error:error.message
+        })
+
     }
 }

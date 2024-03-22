@@ -1,5 +1,5 @@
 const Tag = require("../models/Categories");
-
+const Course = require("../models/Course")
 //create tag 
 exports.createCategory = async(req,res)=>{
     try{
