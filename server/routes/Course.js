@@ -77,6 +77,7 @@ router.post("/getCourseDetails", getCourseDetails)
 router.post("/getFullCourseDetails", auth, getFullCourseDetails)
 // Edit Course routes
 router.post("/editCourse", auth, isInstructor, editCourse)
+//we are middlewares for all the routes where ever it is required 
 // Get all Courses Under a Specific Instructor
 router.get("/getInstructorCourses", auth, isInstructor, getInstructorCourses)
 // Delete a Course
