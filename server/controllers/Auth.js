@@ -23,7 +23,7 @@ exports.sendOTP = async(req,res)=>{
         var otp = otpGenerator.generate(6,{
             upperCaseAlphabets:false,
             lowerCaseAlphabets:false,
-            specialChars:false
+            specialChars:false //these all params will be included to avoid letter and special character
         });
         console.log("OTP generated",otp);
 
