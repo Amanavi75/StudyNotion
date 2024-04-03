@@ -118,7 +118,7 @@ exports.signUp = async(req,res)=>{
          message:"unable to find otp"
      })
 
- }else if(otp!=recentOtp){
+ }else if(otp!=recentOtp){ // if otp is not equal to recent otp 
      //todo
      return res.status(401).json({
          success:false,
