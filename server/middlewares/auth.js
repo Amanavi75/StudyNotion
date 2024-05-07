@@ -20,7 +20,6 @@ exports.auth = async(req,res,next)=>{
                 message:"unable to get token  or token is missing"
             })
         }
-
         //verify the token
         try {
             const decode =  jwt.verify(token,process.env.JWT_SECRET);
@@ -41,6 +40,7 @@ exports.auth = async(req,res,next)=>{
 
     }catch(error){
 
+        // sending error if unable to process  the  request
         return res.status(500).json({
             success:false,
             message:"unable to verify during the authentication"
