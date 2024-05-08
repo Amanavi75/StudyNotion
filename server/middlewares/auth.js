@@ -48,7 +48,7 @@ exports.auth = async(req,res,next)=>{
     }
 }
 
-//isStudent 
+//isStudent  middleware for checking the category of registered perso 
 exports.isStudent = async (req,res,next)=>{
     try{
         if(req.user.accountType!="Student"){
