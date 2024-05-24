@@ -98,6 +98,7 @@ exports.isAdmin = async(req,res)=>{
         }
     }
     catch(error){
+        //sending error if unable to process  the  request
         res.status(400).json({
             success:false,
             message:"unable to verify Admin's id"
